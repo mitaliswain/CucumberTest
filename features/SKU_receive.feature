@@ -94,7 +94,7 @@ Feature: SKU receive feature
     Scenarios:
       | field	 								|value				|button			|Expected text |
       | Location 								|Location1			|Receive		|Shipment:|
-      | Shipment                                |27			|Receive		|Purchase Order:|
+      | Shipment                                |27					|Receive		|Purchase Order:|
       |	Purchase Order							|PO1				|Receive		|Case:|
 	  | Case							 		|New Case			|Receive		|Item:|
       |	Item									|12345				|Receive		|Quantity:|

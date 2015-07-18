@@ -1,0 +1,6 @@
+gem 'watir'
+gem 'cucumber'
+gem 'watir-webdriver'
+gem 'rspec'
+gem 'headless'
+gem 'rspec-expectations'
