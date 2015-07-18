@@ -1,36 +1,55 @@
-require 'watir-webdriver'
-b = Watir::Browser.new
+class LinkedIn
+    require 'watir-webdriver'
+    
+  def initialize  
+     @b = Watir::Browser.new
+  end   
+    
+def start
 
-case_intial = '2015'
-p "#{case_intial}#{Time.now.to_s}"
-=begin
-def assert condition, message
-  raise 'Test Failed' if ! condition
-  p "Test Passed for #{message}"
-rescue
-  p "Test Failed for #{message}"
+  @profile_list = []
+
+    #Login
+    @b.goto 'https://www.linkedin.com/nhome'
+    @b.text_field(:id => 'session_key-login').set 'jagannath_lenka@yahoo.com'
+    @b.text_field(:id => 'session_password-login').set 'jlenka@123'
+    @b.button(:id => 'signin').click
+    
+    #Search
+    @b.text_field(:id => 'main-search-box').set 'Infosys AVP'
+    @b.button(:name => 'search').click
+
+    
+    #paths = @b.ol(:id => 'results') 
+    #get_profile_list(paths)
+
+ 
+    20.times.each do |i|
+      @b.li(:class => 'next').link.click    
+      path =@b.ol(:id => 'results') 
+      get_profile_list(path)
+    end 
+    
+    p @profile_list.size
+    
+    @b.close
+
 end
-=end
 
-client = 'WM'
-warehouse = 'WH1'
-location = 'Location1'
-shipment = 'Shipment1'
+  
+  def get_profile_list(paths) 
+    sleep 10
+    paths.links.each do |link|
+       @profile_list << link.href if link.href.include? '/profile/view?'
+    end
+  end
+  
+  def get_profile_detail
+    @profile_list.each do |profile|
+     @b.goto(profile)
+    end
+  end
+  
+end  
 
-b.goto 'http://wmsrf.herokuapp.com/mainmenu/new'
-b.text_field(:name => 'client').set client
-b.text_field(:name => 'warehouse').set warehouse
-#b.select_list(:id => 'entry_1').selected? 'Ruby'
-b.button(:name => 'commit').click
-assert((b.text.include? "User: #{client}/#{warehouse}//"), 'Shipment page should show up')
-
-b.text_field(:name => 'value').set location
-b.button(:value => 'Receive').click
-assert((b.text.include? "Shipment:"), 'Shipment should show up')
-
-b.text_field(:name => 'value').set shipment
-b.button(:value => 'Receive').click
-assert((b.text.include? "Purchase Order:"), 'Purchase order should show up')
-
-b.close
-
+LinkedIn.new.start
